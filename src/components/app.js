@@ -9,11 +9,7 @@ export default class App extends Component {
   maxId = 100;
 
   state = {
-    todoData: [
-      //   this.createTask("Выпить кофе"),
-      //   this.createTask("Сделать первое приложение"),
-      //   this.createTask("Отметить окончание JS Core"),
-    ],
+    todoData: [],
     filter: "all",
   };
 
