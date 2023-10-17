@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import TaskList from "./task-list";
-import NewTaskForm from "./new-task-form";
-import Footer from "./footer";
-import "../style.css";
+import TaskList from "../task-list/task-list";
+import NewTaskForm from "../new-task-form/new-task-form";
+import Footer from "../footer/footer";
+import "./app.css";
 
 export default class App extends Component {
   maxId = 100;
@@ -20,6 +20,7 @@ export default class App extends Component {
       editing: false,
       checked: false,
       id: this.maxId++,
+      createTime: new Date(),
     };
   }
 
@@ -36,6 +37,7 @@ export default class App extends Component {
   };
 
   addTask = (text) => {
+    if (text.trim() === "") return;
     const newTask = this.createTask(text);
 
     this.setState(({ todoData }) => {

@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { formatDistanceToNow, formatDistance, subDays } from "date-fns";
+
+import "./task.css";
 
 export default class Task extends Component {
   state = {
@@ -13,7 +16,14 @@ export default class Task extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    this.props.updateTask(this.state.label, this.props.id);
+    if (this.state.label.trim() === "") {
+      const input = event.target.firstElementChild;
+      input.value = "";
+      input.placeholder = "The task cannot be empty!";
+      return;
+    }
+    const a = event.target.querySelector(".edit").value;
+    this.props.updateTask(a, this.props.id);
   };
 
   render() {
@@ -26,6 +36,7 @@ export default class Task extends Component {
       onToggleEditing,
       completed,
       editing,
+      createTime,
     } = this.props;
 
     let classNames = "";
@@ -48,7 +59,10 @@ export default class Task extends Component {
             />
             <label>
               <span className="description">{label}</span>
-              <span className="created">created 5 minutes ago</span>
+              <span className="created">
+                created{" "}
+                {formatDistanceToNow(createTime, { includeSeconds: true })}
+              </span>
             </label>
             <button
               className="icon icon-edit"
