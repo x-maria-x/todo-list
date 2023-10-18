@@ -1,0 +1,69 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true,
+      "jest": true
+    },
+    "ignorePatterns": ["node_modules", "dist", "build"],
+    "extends": [
+        "airbnb", 
+        "airbnb/hooks", 
+        "plugin:react/recommended", 
+        "prettier",
+        "eslint:recommended"
+    ],
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "plugins": ["react", "jsx-a11y", "import", "react-hooks", "prettier"],
+    "rules": {
+      "indent": ["error", 2, { "SwitchCase": 1 }],
+      "prettier/prettier": "error",
+      "linebreak-style": [0, "unix"],
+      "quotes": ["error", "single"],
+      "semi": ["error", "never"],
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": 0,
+      "import/no-unresolved": [2, { "caseSensitive": false }],
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+      "react/state-in-constructor": 0,
+      "jsx-a11y/label-has-associated-control": 0,
+      "no-plusplus": "off",
+      "react/jsx-props-no-spreading": ["off", {
+        "custom": "ignore" 
+    }],
+      "react/destructuring-assignment": [
+        "off",
+        "always",
+        { "ignoreClassFields": true }
+      ],
+
+      "import/order": [
+        2,
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index"
+          ],
+          "newlines-between": "always"
+        }
+      ]
+    },
+    "settings": {
+      "version": "detect",
+      "import/resolver": {
+        "node": {
+          "extensions": [".js", ".jsx", ".ts", ".tsx"],
+          "moduleDirectory": ["node_modules", "src/"]
+        }
+      }
+    }
+  }
