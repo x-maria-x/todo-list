@@ -5,7 +5,7 @@ import Task from '../task/task'
 
 import './task-list.css'
 
-function TaskList({ todos, onDeleted, onToggleCompleted, onToggleEditing, updateTask }) {
+function TaskList({ todos, onDeleted, onToggleCompleted, onToggleEditing, updateTask, timerOn, timerOff }) {
   const elements = todos.map((item) => (
     <span key={item.id}>
       <Task
@@ -14,6 +14,8 @@ function TaskList({ todos, onDeleted, onToggleCompleted, onToggleEditing, update
         onToggleCompleted={() => onToggleCompleted(item.id)}
         onToggleEditing={() => onToggleEditing(item.id)}
         updateTask={(newLabel, id) => updateTask(newLabel, id)}
+        timerOn={() => timerOn(item.id)}
+        timerOff={() => timerOff(item.id)}
       />
     </span>
   ))
@@ -27,6 +29,8 @@ TaskList.propTypes = {
   onToggleCompleted: PropTypes.func,
   onToggleEditing: PropTypes.func,
   updateTask: PropTypes.func,
+  timerOn: PropTypes.func,
+  timerOff: PropTypes.func,
 }
 
 TaskList.defaultProps = {
@@ -35,6 +39,8 @@ TaskList.defaultProps = {
   onToggleCompleted: () => {},
   onToggleEditing: () => {},
   updateTask: () => {},
+  timerOn: () => {},
+  timerOff: () => {},
 }
 
 export default TaskList

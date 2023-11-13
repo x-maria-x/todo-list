@@ -11,6 +11,7 @@ export default class App extends Component {
   state = {
     todoData: [],
     filter: 'all',
+    timers: {},
   }
 
   static onFilter = (items, filter) => {
@@ -38,9 +39,9 @@ export default class App extends Component {
     })
   }
 
-  addTask = (text) => {
+  addTask = (text, time) => {
     if (text.trim() === '') return
-    const newTask = this.createTask(text)
+    const newTask = this.createTask(text, time)
 
     this.setState(({ todoData }) => {
       const newArr = [...todoData, newTask]
@@ -103,7 +104,40 @@ export default class App extends Component {
     this.setState({ filter })
   }
 
-  createTask(label) {
+  timerOn = (id) => {
+    const { todoData, timers } = this.state
+    const task = todoData.find((el) => el.id === id)
+    const isTimerOn = task ? task.isTimerOn : false
+    if (isTimerOn) return
+
+    timers[id] = setInterval(() => {
+      this.setState(() => {
+        const newTaskData = todoData.slice()
+        task.time--
+        if (task.time === 0) {
+          clearInterval(timers[id])
+        }
+        task.isTimerOn = true
+        return newTaskData
+      })
+    }, 1000)
+  }
+
+  timerOff = (id) => {
+    const { timers } = this.state
+
+    clearInterval(timers[id])
+    delete timers[id]
+
+    this.setState(({ todoData }) => {
+      const newTaskData = todoData.slice()
+      const task = newTaskData.find((el) => el.id === id)
+      task.isTimerOn = false
+      return newTaskData
+    })
+  }
+
+  createTask(label, time = null) {
     return {
       label,
       completed: false,
@@ -111,6 +145,8 @@ export default class App extends Component {
       checked: false,
       id: this.maxId++,
       createTime: new Date(),
+      time,
+      isTimerOn: false,
     }
   }
 
@@ -134,6 +170,8 @@ export default class App extends Component {
             onToggleCompleted={this.onToggleCompleted}
             onToggleEditing={this.onToggleEditing}
             updateTask={this.updateTask}
+            timerOn={this.timerOn}
+            timerOff={this.timerOff}
           />
           <Footer
             toDo={todoCount}

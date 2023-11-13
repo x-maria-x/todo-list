@@ -14,3 +14,70 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.timer {
+  font-size: 13px;
+}
+.timer-button {
+  display: flex;
+}
+
+.description {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  flex-direction: column;
+}
+
+.todo-list li .view {
+  position: relative;
+}
+
+.todo-listli label {
+  font-size: 13px;
+  color: gray;
+}
+
+.todo-list li label .title {
+  word-break: break-all;
+  display: block;
+  line-height: 1.2;
+
+  color: #4d4d4d;
+}
+
+.todo-list li.completed label .title {
+  color: #cdcdcd;
+  text-decoration: line-through;
+}
+
+.todo-list li .icon.icon-pause,
+.todo-list li .icon.icon-play {
+  position: relative;
+  font-size: 18px;
+  width: auto;
+  height: 18px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.todo-list li .icon-play {
+  top: auto !important;
+}
+
+.icon-pause:after {
+  content: '⏸';
+}
+
+.icon-play:after {
+  content: '▶';
+}
+
+.time-over {
+  font-size: 13px;
+  color: tomato;
+}

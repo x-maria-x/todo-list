@@ -1,4 +1,9 @@
-.new-todo {
+.new-todo-form {
+  display: flex;
+}
+
+.new-todo,
+.new-todo-form__timer {
   position: relative;
   margin: 0;
   width: 100%;
@@ -15,9 +20,44 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.new-todo {
+.new-todo-form {
+  display: flex;
+  margin-bottom: 0;
+}
+
+.new-todo,
+.new-todo-form .new-todo-form__timer {
   padding: 16px 16px 16px 60px;
   border: none;
   background: rgba(0, 0, 0, 0.003);
   box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
+}
+
+.new-todo {
+  width: 70%;
+}
+
+.new-todo-form .new-todo-form__timer {
+  width: 15%;
+  padding-left: 16px;
+}
+
+.todo-list li .view {
+  position: relative;
+}
+
+.todo-listlilabel {
+  font-size: 13px;
+  color: gray;
+}
+.todo-list li label .title {
+  word-break: break-all;
+  display: block;
+  line-height: 1.2;
+  color: #4d4d4d;
+}
+
+.todo-list li.completed label .title {
+  color: #cdcdcd;
+  text-decoration: line-through;
 }

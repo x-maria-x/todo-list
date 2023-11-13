@@ -33,9 +33,23 @@ export default class Task extends Component {
     updateTask(a, id)
   }
 
+  static getPadTime = (time) => time.toString().padStart(2, '0')
+
   render() {
-    const { label, id, onDeleted, checked, onToggleCompleted, onToggleEditing, completed, editing, createTime } =
-      this.props
+    const {
+      label,
+      id,
+      onDeleted,
+      checked,
+      onToggleCompleted,
+      onToggleEditing,
+      completed,
+      editing,
+      createTime,
+      time,
+      timerOn,
+      timerOff,
+    } = this.props
     const { label: labelState } = this.state
 
     let classNames = ''
@@ -46,12 +60,31 @@ export default class Task extends Component {
       classNames += ' editing'
     }
 
+    const min = Task.getPadTime(Math.floor(time / 60))
+    const sec = Task.getPadTime(time - min * 60)
+
+    const timer = () => {
+      if (time)
+        return (
+          <>
+            <div className="timer">{`${min}:${sec}`}</div>
+            <div className="timer-button">
+              <button className="icon icon-play" type="button" aria-label="play" onClick={timerOn} />
+              <button className="icon icon-pause" type="button" aria-label="pause" onClick={timerOff} />
+            </div>
+          </>
+        )
+      if (time === 0) return <span className="time-over">Time over</span>
+      return null
+    }
+
     return (
       <li className={classNames} key={id}>
         <div className="view">
           <input className="toggle" type="checkbox" onClick={onToggleCompleted} defaultChecked={checked} id={id} />
           <label htmlFor={id}>
-            <span className="description">{label}</span>
+            <span className="title">{label}</span>
+            <span className="description">{timer()}</span>
             <span className="created">created {formatDistanceToNow(createTime, { includeSeconds: true })}</span>
           </label>
           <button className="icon icon-edit" onClick={onToggleEditing} type="button" aria-label="Editing" />
@@ -78,6 +111,8 @@ Task.propTypes = {
   onToggleCompleted: PropTypes.func,
   onToggleEditing: PropTypes.func,
   updateTask: PropTypes.func,
+  timerOn: PropTypes.func,
+  timerOff: PropTypes.func,
 }
 
 Task.defaultProps = {
@@ -86,4 +121,6 @@ Task.defaultProps = {
   onToggleCompleted: () => {},
   onToggleEditing: () => {},
   updateTask: () => {},
+  timerOn: () => {},
+  timerOff: () => {},
 }
