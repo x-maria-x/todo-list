@@ -3,16 +3,59 @@ import React, { Component } from 'react'
 import NewTaskForm from '../new-task-form/new-task-form'
 import Footer from '../footer/footer'
 import TaskList from '../task-list/task-list'
+
 import './app.css'
 
 export default class App extends Component {
-  maxId = 0
+  minId = 0
 
   state = {
-    todoData: [],
+    todoData: [
+      {
+        label: '0',
+        completed: false,
+        editing: false,
+        checked: false,
+        id: 0,
+        createTime: new Date(),
+        time: 5,
+        isTimerOn: true,
+      },
+      {
+        label: '1',
+        completed: false,
+        editing: false,
+        checked: false,
+        id: 1,
+        createTime: new Date(),
+        time: 5,
+        isTimerOn: true,
+      },
+      {
+        label: '2',
+        completed: false,
+        editing: false,
+        checked: false,
+        id: 2,
+        createTime: new Date(),
+        time: 5,
+        isTimerOn: true,
+      },
+      {
+        label: '3',
+        completed: false,
+        editing: false,
+        checked: false,
+        id: 3,
+        createTime: new Date(),
+        time: 5,
+        isTimerOn: true,
+      },
+    ],
     filter: 'all',
-    timers: {},
   }
+
+  timers = {}
 
   static onFilter = (items, filter) => {
     switch (filter) {
@@ -28,6 +71,8 @@ export default class App extends Component {
   }
 
   deleteTask = (id) => {
+    clearInterval(this.timers[id])
+    delete this.timers[id]
     this.setState(({ todoData }) => {
       const idx = todoData.findIndex((el) => el.id === id)
 
@@ -36,7 +81,7 @@ export default class App extends Component {
       return {
         todoData: newArr,
       }
-    })
+    }, this.updateTimers)
   }
 
   addTask = (text, time) => {
@@ -94,46 +139,98 @@ export default class App extends Component {
   }
 
   clearComplitedTasks = () => {
-    this.setState(({ todoData }) => {
-      const newArr = todoData.filter((item) => !item.completed)
-      return { todoData: newArr }
-    })
+    const complitedTasks = this.state.todoData.filter((task) => task.completed)
+    complitedTasks.forEach((task) => this.deleteTask(task.id))
   }
 
   onFilterChange = (filter) => {
     this.setState({ filter })
   }
 
-  timerOn = (id) => {
-    const { todoData, timers } = this.state
-    const task = todoData.find((el) => el.id === id)
-    const isTimerOn = task ? task.isTimerOn : false
-    if (isTimerOn) return
+  timerOn = (id, e) => {
+    if (e) e.stopPropagation()
+    const idx = this.state.todoData.findIndex((el) => el.id === id)
+    // const idx = id
+    if (idx === -1) return
+    const task = this.state.todoData[idx]
+    // if (!task) return
+    // const isTimerOn = task ? task.isTimerOn : false
+    // if (isTimerOn) return
+    // if (Object.keys(this.timers).includes(idx))
+    // console.log(Object.keys(this.timers))
+    // console.log(idx.toString())
+    // console.log(Object.keys(this.timers).includes(idx.toString()))
+    if (Object.keys(this.timers).includes(id.toString())) return
 
-    timers[id] = setInterval(() => {
-      this.setState(() => {
-        const newTaskData = todoData.slice()
-        task.time--
-        if (task.time === 0) {
-          clearInterval(timers[id])
+    this.timers[id] = setInterval(() => {
+      if (!this.state.todoData[idx]) return
+
+      this.setState(
+        ({ todoData }) => {
+          const oldTask = todoData[idx]
+          oldTask.time--
+          oldTask.isTimerOn = true
+          const newTask = { ...oldTask }
+          const newArr = [...todoData.slice(0, idx), newTask, ...todoData.slice(idx + 1)]
+          return {
+            todoData: newArr,
+          }
+        },
+        () => {
+          if (this.state.todoData[idx].time === 0) {
+            clearInterval(this.timers[idx])
+            delete this.timers[idx]
+            task.isTimerOn = false
+          }
         }
-        task.isTimerOn = true
-        return newTaskData
-      })
+      )
     }, 1000)
   }
 
-  timerOff = (id) => {
-    const { timers } = this.state
+  timerOff = (id, e) => {
+    if (e) e.stopPropagation()
+    // const { timers } = this.state
 
-    clearInterval(timers[id])
-    delete timers[id]
+    clearInterval(this.timers[id])
+    delete this.timers[id]
 
     this.setState(({ todoData }) => {
-      const newTaskData = todoData.slice()
-      const task = newTaskData.find((el) => el.id === id)
-      task.isTimerOn = false
-      return newTaskData
+      const idx = todoData.findIndex((el) => el.id === id)
+      const oldTask = todoData[idx]
+      oldTask.isTimerOn = false
+      const newTask = { ...oldTask }
+      const newArr = [...todoData.slice(0, idx), newTask, ...todoData.slice(idx + 1)]
+      return {
+        todoData: newArr,
+      }
+    })
+    console.log(this.timers)
+  }
+
+  updateTimers() {
+    Object.values(this.timers).forEach((timer) => clearInterval(timer))
+    // Object.keys(this.timers).forEach((taskId) => {
+    //   this.timerOff(taskId)
+    // clearInterval(this.timers[taskId])
+    // this.setState(({ todoData }) => {
+    //   console.log(todoData)
+
+    //   const newTodoData = [...todoData]
+    //   console.log(newTodoData)
+    //   newTodoData.forEach((task) => {
+    //     if (task.id === taskId) task.isTimerOn = false
+    //   })
+    //   return {
+    //     todoData: newTodoData,
+    //   }
+    // })
+    // })
+    this.timers = {}
+
+    this.state.todoData.forEach((item) => {
+      if (item.isTimerOn) {
+        this.timerOn(item.id)
+      }
     })
   }
 
@@ -143,7 +240,7 @@ export default class App extends Component {
       completed: false,
       editing: false,
       checked: false,
-      id: this.maxId++,
+      id: this.minId++,
       createTime: new Date(),
       time,
       isTimerOn: false,

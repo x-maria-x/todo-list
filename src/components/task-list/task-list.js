@@ -14,8 +14,8 @@ function TaskList({ todos, onDeleted, onToggleCompleted, onToggleEditing, update
         onToggleCompleted={() => onToggleCompleted(item.id)}
         onToggleEditing={() => onToggleEditing(item.id)}
         updateTask={(newLabel, id) => updateTask(newLabel, id)}
-        timerOn={() => timerOn(item.id)}
-        timerOff={() => timerOff(item.id)}
+        timerOn={(e) => timerOn(item.id, e)}
+        timerOff={(e) => timerOff(item.id, e)}
       />
     </span>
   ))

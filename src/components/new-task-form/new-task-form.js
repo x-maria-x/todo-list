@@ -16,15 +16,15 @@ export default class NewTaskForm extends Component {
     })
   }
 
-  onMinChange = (event) => {
-    this.setState({
-      minValue: event.target.value,
-    })
-  }
+  // onMinChange = (event) => {
+  //   this.setState({
+  //     minValue: event.target.value,
+  //   })
+  // }
 
-  onSecChange = (event) => {
+  onChangeTimerValue = (event) => {
     this.setState({
-      secValue: event.target.value,
+      [event.target.name]: event.target.value,
     })
   }
 
@@ -62,18 +62,18 @@ export default class NewTaskForm extends Component {
         <input
           className="new-todo-form__timer"
           type="number"
-          name="new-task-min"
+          name="minValue"
           placeholder="Min"
           value={minValue}
-          onChange={this.onMinChange}
+          onChange={this.onChangeTimerValue}
         />
         <input
           className="new-todo-form__timer"
           type="number"
-          name="new-task-sec"
+          name="secValue"
           placeholder="Sec"
           value={secValue}
-          onChange={this.onSecChange}
+          onChange={this.onChangeTimerValue}
         />
         <input type="submit" style={{ display: 'none' }} />
       </form>
