@@ -23,14 +23,14 @@ export default class Task extends Component {
     const { label } = this.state
     const { updateTask, id } = this.props
 
-    if (label.trim() === '') {
+    if (!label.trim()) {
       const input = event.target.firstElementChild
       input.value = ''
       input.placeholder = 'The task cannot be empty!'
       return
     }
-    const a = event.target.querySelector('.edit').value
-    updateTask(a, id)
+
+    updateTask(label, id)
   }
 
   static getPadTime = (time) => time.toString().padStart(2, '0')

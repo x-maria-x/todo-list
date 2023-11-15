@@ -83,26 +83,22 @@ export default class App extends Component {
     this.setState({ filter })
   }
 
-  timerOn = (idTask, e) => {
-    if (e) e.stopPropagation()
-    const indexTask = this.state.todoData.findIndex((task) => task.id === idTask)
-    if (indexTask === -1) return
-    const task = this.state.todoData[indexTask]
-
+  timerOn = (idTask) => {
     if (Object.keys(this.timers).includes(idTask.toString())) return
 
     this.timers[idTask] = setInterval(() => {
-      if (!this.state.todoData[indexTask]) return
-
       this.setState(({ todoData }) => {
+        const task = todoData.find((item) => item.id === idTask)
         task.time--
+
         if (!task.time) {
-          clearInterval(this.timers[indexTask])
-          delete this.timers[indexTask]
+          clearInterval(this.timers[idTask])
+          delete this.timers[idTask]
           task.isTimerOn = false
         } else {
           task.isTimerOn = true
         }
+
         return {
           todoData: todoData.map((item) => (item.id === idTask ? task : item)),
         }
@@ -110,20 +106,13 @@ export default class App extends Component {
     }, 1000)
   }
 
-  timerOff = (idTask, e) => {
-    if (e) e.stopPropagation()
-
+  timerOff = (idTask) => {
     clearInterval(this.timers[idTask])
     delete this.timers[idTask]
 
-    this.setState(({ todoData }) => {
-      const indexTask = todoData.findIndex((task) => task.id === idTask)
-      const task = todoData[indexTask]
-      task.isTimerOn = false
-      return {
-        todoData: todoData.map((item) => (item.id === idTask ? task : item)),
-      }
-    })
+    this.setState(({ todoData }) => ({
+      todoData: todoData.map((item) => (item.id === idTask ? { ...item, isTimerOn: false } : item)),
+    }))
   }
 
   updateTimers() {

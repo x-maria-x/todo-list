@@ -16,12 +16,6 @@ export default class NewTaskForm extends Component {
     })
   }
 
-  // onMinChange = (event) => {
-  //   this.setState({
-  //     minValue: event.target.value,
-  //   })
-  // }
-
   onChangeTimerValue = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
