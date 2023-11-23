@@ -61,3 +61,7 @@
   color: #cdcdcd;
   text-decoration: line-through;
 }
+
+.new-todo-form.invalid {
+  border: 1px solid red;
+}
